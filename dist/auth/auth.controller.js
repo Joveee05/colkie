@@ -16,12 +16,19 @@ exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
 const auth_service_1 = require("./auth.service");
 const new_user_dto_1 = require("../users/dtos/new-user.dto");
+const existing_user_dto_1 = require("../users/dtos/existing-user.dto");
 let AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
     }
     register(user) {
         return this.authService.register(user);
+    }
+    login(user) {
+        return this.authService.login(user);
+    }
+    verifyJwt(payload) {
+        return this.authService.verifyJwt(payload.jwt);
     }
 };
 __decorate([
@@ -31,6 +38,22 @@ __decorate([
     __metadata("design:paramtypes", [new_user_dto_1.NewUserDTO]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "register", null);
+__decorate([
+    (0, common_1.Post)('login'),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [existing_user_dto_1.ExistingUserDTO]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "login", null);
+__decorate([
+    (0, common_1.Post)('verify-jwt'),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "verifyJwt", null);
 AuthController = __decorate([
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService])

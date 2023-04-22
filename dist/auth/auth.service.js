@@ -13,9 +13,11 @@ exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
 const bcrypt = require("bcrypt");
 const users_service_1 = require("../users/users.service");
+const jwt_1 = require("@nestjs/jwt");
 let AuthService = class AuthService {
-    constructor(userService) {
+    constructor(userService, jwtService) {
         this.userService = userService;
+        this.jwtService = jwtService;
     }
     async hashPassword(password) {
         const SALT = bcrypt.genSaltSync();
@@ -35,10 +37,46 @@ let AuthService = class AuthService {
             data: newUser,
         };
     }
+    async doesPasswordMatch(password, hashedPassword) {
+        return bcrypt.compare(password, hashedPassword);
+    }
+    async validateUser(email, password) {
+        const user = await this.userService.findByEmail(email);
+        if (!user)
+            return null;
+        const comparePassword = await this.doesPasswordMatch(password, user.password);
+        if (!comparePassword)
+            return null;
+        return user;
+    }
+    async login(existingUser) {
+        const { email, password } = existingUser;
+        const user = await this.validateUser(email, password);
+        if (!user) {
+            throw new common_1.HttpException('Incorrect email or password', common_1.HttpStatus.UNAUTHORIZED);
+        }
+        const jwt = await this.jwtService.signAsync({ user });
+        return {
+            status: 'success',
+            message: 'Login successful',
+            token: jwt,
+            data: user,
+        };
+    }
+    async verifyJwt(jwt) {
+        try {
+            const { exp } = await this.jwtService.verifyAsync(jwt);
+            return { exp };
+        }
+        catch (error) {
+            throw new common_1.HttpException('Invalid JWT', common_1.HttpStatus.UNAUTHORIZED);
+        }
+    }
 };
 AuthService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [users_service_1.UsersService])
+    __metadata("design:paramtypes", [users_service_1.UsersService,
+        jwt_1.JwtService])
 ], AuthService);
 exports.AuthService = AuthService;
 //# sourceMappingURL=auth.service.js.map

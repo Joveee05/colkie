@@ -9,15 +9,29 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthModule = void 0;
 const common_1 = require("@nestjs/common");
 const auth_controller_1 = require("./auth.controller");
+const jwt_1 = require("@nestjs/jwt");
 const auth_service_1 = require("./auth.service");
 const users_module_1 = require("../users/users.module");
+const config_1 = require("@nestjs/config");
+const jwt_guard_1 = require("./guards/jwt.guard");
+const jwt_strategy_1 = require("./guards/jwt.strategy");
 let AuthModule = class AuthModule {
 };
 AuthModule = __decorate([
     (0, common_1.Module)({
-        imports: [users_module_1.UsersModule],
+        imports: [
+            users_module_1.UsersModule,
+            jwt_1.JwtModule.registerAsync({
+                imports: [config_1.ConfigModule],
+                inject: [config_1.ConfigService],
+                useFactory: async (config) => ({
+                    secret: config.get('JWT_SECRET'),
+                    signOptions: { expiresIn: config.get('JWT_EXPIRES_IN') },
+                }),
+            }),
+        ],
         controllers: [auth_controller_1.AuthController],
-        providers: [auth_service_1.AuthService],
+        providers: [auth_service_1.AuthService, jwt_guard_1.JwtGuard, jwt_strategy_1.JwtStrategy],
     })
 ], AuthModule);
 exports.AuthModule = AuthModule;

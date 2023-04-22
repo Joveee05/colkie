@@ -32,4 +32,5 @@ export interface User {
   email: string;
   phoneNumber: string;
   bio: string;
+  password: string;
 }
