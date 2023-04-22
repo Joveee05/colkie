@@ -3,12 +3,20 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './modules/users/users.module';
-import * as dotenv from 'dotenv';
-dotenv.config({ path: '../config.env' });
-import express from 'express';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
-  imports: [UsersModule, MongooseModule.forRoot('')],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true, envFilePath: 'config.env' }),
+    UsersModule,
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (config: ConfigService) => ({
+        uri: config.get<string>('DATABASE'),
+      }),
+    }),
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
