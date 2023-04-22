@@ -1,40 +1,11 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Get,
-  Param,
-  Patch,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Body, Get, Param, Patch, Delete } from '@nestjs/common';
 
-import { UsersService } from 'src/service/users/users.service';
+import { UsersService } from 'src/users/users.service';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  async addUser(
-    @Body('fullName') fullName: string,
-    @Body('userName') userName: string,
-    @Body('email') email: string,
-    @Body('phoneNumber') phoneNumber: string,
-    @Body('bio') bio: string,
-  ) {
-    const user = await this.usersService.createUser(
-      fullName,
-      userName,
-      email,
-      phoneNumber,
-      bio,
-    );
-    return {
-      status: 'success',
-      message: 'User created successfully',
-      data: user,
-    };
-  }
   @Get()
   async getAllUsers() {
     const users = await this.usersService.getAllUsers();
