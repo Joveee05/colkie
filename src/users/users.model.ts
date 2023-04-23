@@ -11,6 +11,7 @@ export const UserSchema = new mongoose.Schema(
     },
     phoneNumber: { type: String, required: [true, 'Please enter phoneNumber'] },
     photo: { type: String, default: 'default.jpg' },
+    rooms: [{ type: String }],
     bio: { type: String, maxLength: 250 },
     rooms: [{ type: String }],
     password: { type: String, minLength: 8 },
