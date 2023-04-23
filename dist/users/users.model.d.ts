@@ -13,6 +13,7 @@ export declare const UserSchema: mongoose.Schema<any, mongoose.Model<any, any, a
     userName: string;
     phoneNumber: string;
     photo: string;
+    rooms: string[];
     email?: string;
     bio?: string;
     password?: string;
@@ -24,6 +25,7 @@ export declare const UserSchema: mongoose.Schema<any, mongoose.Model<any, any, a
     userName: string;
     phoneNumber: string;
     photo: string;
+    rooms: string[];
     email?: string;
     bio?: string;
     password?: string;
@@ -35,6 +37,7 @@ export declare const UserSchema: mongoose.Schema<any, mongoose.Model<any, any, a
     userName: string;
     phoneNumber: string;
     photo: string;
+    rooms: string[];
     email?: string;
     bio?: string;
     password?: string;
