@@ -1,4 +1,9 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Injectable,
+  HttpException,
+  HttpStatus,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Room } from './rooms.model';
@@ -29,5 +34,42 @@ export class RoomsService {
       message: 'Room created successfully',
       data: response,
     };
+  }
+
+  async getAllRooms() {
+    const rooms = await this.roomModel.find().sort('-createdAt');
+    if (rooms.length < 1) {
+      throw new NotFoundException('No rooms found in database');
+    }
+    return rooms;
+  }
+
+  async findRoom(roomId: string) {
+    const room = await this.roomModel.findById(roomId);
+    if (!room) {
+      throw new NotFoundException('Could not find a room with this id');
+    }
+    return room;
+  }
+
+  async updateRoom(roomId: string, roomName: string, description: string) {
+    const room = await this.roomModel.findByIdAndUpdate(roomId);
+    if (!room) {
+      throw new NotFoundException('Could not find any room with this id');
+    }
+    if (roomName) {
+      room.roomName = roomName;
+    } else if (description) {
+      room.description = description;
+    }
+    const result = await room.save({ validateBeforeSave: true });
+    return result;
+  }
+
+  async deleteRoom(roomId: string) {
+    const result = await this.roomModel.findByIdAndDelete(roomId);
+    if (!result) {
+      throw new NotFoundException('Could not find room with this id');
+    }
   }
 }
