@@ -6,6 +6,7 @@ export const RoomSchema = new mongoose.Schema(
     coverPhoto: { type: String, default: 'default.jpg' },
     description: { type: String, maxLength: 250 },
     participants: [{ type: String }],
+    messages: [{ type: String }],
   },
   {
     versionKey: false,
