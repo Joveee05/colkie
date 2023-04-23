@@ -16,4 +16,11 @@ export declare class RoomsController {
             _id: import("mongoose").Types.ObjectId;
         }, never>)[];
     }>;
+    getRoom(roomId: string): Promise<{
+        status: string;
+        message: string;
+        data: import("mongoose").Document<unknown, {}, import("./rooms.model").Room> & Omit<import("./rooms.model").Room & {
+            _id: import("mongoose").Types.ObjectId;
+        }, never>;
+    }>;
 }

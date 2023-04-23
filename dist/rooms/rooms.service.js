@@ -46,6 +46,13 @@ let RoomsService = class RoomsService {
         }
         return rooms;
     }
+    async findRoom(roomId) {
+        const room = await this.roomModel.findById(roomId);
+        if (!room) {
+            throw new common_1.NotFoundException('Could not find a room with this id');
+        }
+        return room;
+    }
 };
 RoomsService = __decorate([
     (0, common_1.Injectable)(),

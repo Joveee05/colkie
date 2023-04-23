@@ -38,4 +38,7 @@ export declare class RoomsService {
     getAllRooms(): Promise<(import("mongoose").Document<unknown, {}, Room> & Omit<Room & {
         _id: import("mongoose").Types.ObjectId;
     }, never>)[]>;
+    findRoom(roomId: string): Promise<import("mongoose").Document<unknown, {}, Room> & Omit<Room & {
+        _id: import("mongoose").Types.ObjectId;
+    }, never>>;
 }
