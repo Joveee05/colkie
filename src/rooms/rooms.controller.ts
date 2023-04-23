@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get } from '@nestjs/common';
 import { RoomsService } from './rooms.service';
 
 @Controller('rooms')
@@ -11,5 +11,15 @@ export class RoomsController {
     @Body('description') description: string,
   ) {
     return this.roomService.createRoom(roomName, description);
+  }
+
+  @Get()
+  async getAllRooms() {
+    const rooms = await this.roomService.getAllRooms();
+    return {
+      status: 'success',
+      message: `${rooms.length} room(s) found`,
+      data: rooms,
+    };
   }
 }

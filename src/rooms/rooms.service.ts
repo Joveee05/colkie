@@ -1,4 +1,9 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Injectable,
+  HttpException,
+  HttpStatus,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Room } from './rooms.model';
@@ -29,5 +34,13 @@ export class RoomsService {
       message: 'Room created successfully',
       data: response,
     };
+  }
+
+  async getAllRooms() {
+    const rooms = await this.roomModel.find().sort('-createdAt');
+    if (rooms.length < 1) {
+      throw new NotFoundException('No rooms found in database');
+    }
+    return rooms;
   }
 }

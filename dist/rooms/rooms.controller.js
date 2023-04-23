@@ -22,6 +22,14 @@ let RoomsController = class RoomsController {
     createRoom(roomName, description) {
         return this.roomService.createRoom(roomName, description);
     }
+    async getAllRooms() {
+        const rooms = await this.roomService.getAllRooms();
+        return {
+            status: 'success',
+            message: `${rooms.length} room(s) found`,
+            data: rooms,
+        };
+    }
 };
 __decorate([
     (0, common_1.Post)('create_room'),
@@ -31,6 +39,12 @@ __decorate([
     __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", void 0)
 ], RoomsController.prototype, "createRoom", null);
+__decorate([
+    (0, common_1.Get)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], RoomsController.prototype, "getAllRooms", null);
 RoomsController = __decorate([
     (0, common_1.Controller)('rooms'),
     __metadata("design:paramtypes", [rooms_service_1.RoomsService])

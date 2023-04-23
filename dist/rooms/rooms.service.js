@@ -39,6 +39,13 @@ let RoomsService = class RoomsService {
             data: response,
         };
     }
+    async getAllRooms() {
+        const rooms = await this.roomModel.find().sort('-createdAt');
+        if (rooms.length < 1) {
+            throw new common_1.NotFoundException('No rooms found in database');
+        }
+        return rooms;
+    }
 };
 RoomsService = __decorate([
     (0, common_1.Injectable)(),
