@@ -51,4 +51,18 @@ export class RoomsService {
     }
     return room;
   }
+
+  async updateRoom(roomId: string, roomName: string, description: string) {
+    const room = await this.roomModel.findByIdAndUpdate(roomId);
+    if (!room) {
+      throw new NotFoundException('Could not find any room with this id');
+    }
+    if (roomName) {
+      room.roomName = roomName;
+    } else if (description) {
+      room.description = description;
+    }
+    const result = await room.save({ validateBeforeSave: true });
+    return result;
+  }
 }
