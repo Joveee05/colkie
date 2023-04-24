@@ -3,6 +3,7 @@ import { MessagesController } from './messages.controller';
 import { MessagesService } from './messages.service';
 import { MessageSchema } from './messages.model';
 import { MongooseModule } from '@nestjs/mongoose';
+import { RoomSchema } from 'src/rooms/rooms.model';
 
 @Module({
   imports: [
@@ -15,6 +16,19 @@ import { MongooseModule } from '@nestjs/mongoose';
             this.populate({
               path: 'roomID userID',
               select: 'roomName fullName userName',
+            });
+            next();
+          });
+          return schema;
+        },
+      },
+      {
+        name: 'Room',
+        useFactory: () => {
+          const schema = RoomSchema;
+          schema.pre(/^find/, function (next) {
+            this.populate({
+              path: 'roomName coverPhoto',
             });
             next();
           });
