@@ -65,4 +65,11 @@ export class RoomsService {
     const result = await room.save({ validateBeforeSave: true });
     return result;
   }
+
+  async deleteRoom(roomId: string) {
+    const result = await this.roomModel.findByIdAndDelete(roomId);
+    if (!result) {
+      throw new NotFoundException('Could not find room with this id');
+    }
+  }
 }
