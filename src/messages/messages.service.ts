@@ -74,4 +74,12 @@ export class MessagesService {
       throw new NotFoundException('Could not find message with this id');
     }
   }
+
+  async getMessagesFromRoom(roomId: string) {
+    const message = await this.messageModel.find({ roomID: roomId });
+    if (!message) {
+      throw new NotFoundException('Oops... This room has no messages yet');
+    }
+    return message;
+  }
 }

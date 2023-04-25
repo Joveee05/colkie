@@ -1,4 +1,12 @@
-import { Controller, Post, Body, Param, Get, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Param,
+  Get,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { MessagesService } from './messages.service';
 
 @Controller('messages')
@@ -43,6 +51,16 @@ export class MessagesController {
     return {
       status: 'success',
       message: 'Message deleted successfully',
+    };
+  }
+
+  @Get('get_messages')
+  async getRoomMessages(@Query('roomId') roomId: string) {
+    const message = await this.messageService.getMessagesFromRoom(roomId);
+    return {
+      status: 'success',
+      message: `This room has ${message.length} messages`,
+      data: message,
     };
   }
 }
