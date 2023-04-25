@@ -3,6 +3,7 @@ import { MessagesController } from './messages.controller';
 import { MessagesService } from './messages.service';
 import { MessageSchema } from './messages.model';
 import { MongooseModule } from '@nestjs/mongoose';
+import { RoomSchema } from 'src/rooms/rooms.model';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { MongooseModule } from '@nestjs/mongoose';
         },
       },
     ]),
+    MongooseModule.forFeature([{ name: 'Room', schema: RoomSchema }]),
   ],
   controllers: [MessagesController],
   providers: [MessagesService],
