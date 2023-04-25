@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Message } from './messages.model';
@@ -37,5 +37,13 @@ export class MessagesService {
       message: 'Message created successfully',
       data: response,
     };
+  }
+
+  async getAllMessages() {
+    const messages = await this.messageModel.find().sort('-createdAt');
+    if (messages.length < 1) {
+      throw new NotFoundException('No messages found in database');
+    }
+    return messages;
   }
 }

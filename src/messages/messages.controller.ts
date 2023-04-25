@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Param } from '@nestjs/common';
+import { Controller, Post, Body, Param, Get } from '@nestjs/common';
 import { MessagesService } from './messages.service';
 
 @Controller('messages')
@@ -12,5 +12,15 @@ export class MessagesController {
     @Param('roomId') roomId: string,
   ) {
     return this.messageService.createMessage(body, roomId, userId);
+  }
+
+  @Get()
+  async allMessages() {
+    const messages = await this.messageService.getAllMessages();
+    return {
+      status: 'success',
+      message: `${messages.length} message(s) found`,
+      data: messages,
+    };
   }
 }
