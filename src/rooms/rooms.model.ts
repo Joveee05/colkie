@@ -6,7 +6,7 @@ export const RoomSchema = new mongoose.Schema(
     coverPhoto: { type: String, default: 'default.jpg' },
     description: { type: String, maxLength: 250 },
     participants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-    messages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Message' }],
+    // messages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Message' }],
   },
   {
     versionKey: false,
