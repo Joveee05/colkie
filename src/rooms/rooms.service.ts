@@ -43,12 +43,4 @@ export class RoomsService {
     }
     return rooms;
   }
-
-  async findRoom(roomId: string) {
-    const room = await this.roomModel.findById(roomId);
-    if (!room) {
-      throw new NotFoundException('Could not find a room with this id');
-    }
-    return room;
-  }
 }

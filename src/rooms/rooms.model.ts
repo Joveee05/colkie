@@ -5,7 +5,8 @@ export const RoomSchema = new mongoose.Schema(
     roomName: { type: String, required: [true, 'Please enter a roomName'] },
     coverPhoto: { type: String, default: 'default.jpg' },
     description: { type: String, maxLength: 250 },
-    participants: [{ type: String }],
+    participants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    // messages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Message' }],
   },
   {
     versionKey: false,

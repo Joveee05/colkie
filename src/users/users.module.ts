@@ -5,7 +5,24 @@ import { UsersController } from './users.controller';
 import { UserSchema } from './users.model';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: 'User', schema: UserSchema }])],
+  imports: [
+    MongooseModule.forFeatureAsync([
+      {
+        name: 'User',
+        useFactory: () => {
+          const schema = UserSchema;
+          schema.pre(/^find/, function (next) {
+            this.populate({
+              path: 'rooms',
+              select: 'roomName description',
+            });
+            next();
+          });
+          return schema;
+        },
+      },
+    ]),
+  ],
   controllers: [UsersController],
   providers: [UsersService],
   exports: [UsersService],
