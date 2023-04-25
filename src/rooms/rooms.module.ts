@@ -13,8 +13,8 @@ import { MongooseModule } from '@nestjs/mongoose';
           const schema = RoomSchema;
           schema.pre(/^find/, function (next) {
             this.populate({
-              path: 'participants',
-              select: 'fullName userName',
+              path: 'participants messages',
+              select: 'fullName userName body',
             });
             next();
           });
