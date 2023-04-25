@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { RoomsService } from './rooms.service';
 
@@ -65,6 +66,15 @@ export class RoomsController {
     return {
       status: 'success',
       message: 'Room deleted successfully',
+    };
+  }
+
+  @Patch(':id/add_user')
+  async addUser(@Param('id') roomId: string, @Query('userId') userId: string) {
+    await this.roomService.addUserToRoom(roomId, userId);
+    return {
+      status: 'success',
+      message: 'User added to room successfully',
     };
   }
 }

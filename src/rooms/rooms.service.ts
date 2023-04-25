@@ -7,13 +7,23 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Room } from './rooms.model';
+import { User } from 'src/users/users.model';
 
 @Injectable()
 export class RoomsService {
-  constructor(@InjectModel('Room') private readonly roomModel: Model<Room>) {}
+  constructor(
+    @InjectModel('Room') private readonly roomModel: Model<Room>,
+    @InjectModel('User') private readonly userModel: Model<User>,
+  ) {}
 
   async findByRoomName(roomName: string): Promise<Room | null> {
     return this.roomModel.findOne({ roomName }).exec();
+  }
+
+  async updateUserRoom(userId: string, roomId: string) {
+    return this.userModel.findByIdAndUpdate(userId, {
+      $push: { rooms: roomId },
+    });
   }
 
   async createRoom(roomName: string, description: string) {
@@ -71,5 +81,14 @@ export class RoomsService {
     if (!result) {
       throw new NotFoundException('Could not find room with this id');
     }
+  }
+
+  async addUserToRoom(roomId: string, userId: string) {
+    const room = await this.roomModel.findByIdAndUpdate(roomId, {
+      $push: { participants: userId },
+    });
+    await this.updateUserRoom(userId, roomId);
+    const result = await room.save({ validateBeforeSave: false });
+    return result;
   }
 }
