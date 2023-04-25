@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Param, Get } from '@nestjs/common';
+import { Controller, Post, Body, Param, Get, Delete } from '@nestjs/common';
 import { MessagesService } from './messages.service';
 
 @Controller('messages')
@@ -31,6 +31,18 @@ export class MessagesController {
       status: 'success',
       message: 'Message found',
       data: message,
+    };
+  }
+
+  @Delete(':id/rooms/:roomId')
+  async deleteMessages(
+    @Param('id') messageId: string,
+    @Param('roomId') roomId: string,
+  ) {
+    await this.messageService.deleteMessage(messageId, roomId);
+    return {
+      status: 'success',
+      message: 'Message deleted successfully',
     };
   }
 }

@@ -22,6 +22,18 @@ export class MessagesService {
       $inc: { numOfMessages: 1 },
     });
   }
+
+  async removeNumOfMessages(roomId: string) {
+    const room = await this.roomModel.findById(roomId);
+    if (room.numOfMessages === 0) {
+      return room;
+    } else {
+      await this.roomModel.findByIdAndUpdate(roomId, {
+        $inc: { numOfMessages: -1 },
+      });
+    }
+  }
+
   async createMessage(body: string, roomID: string, userID: string) {
     const newMessage = new this.messageModel({
       body,
@@ -53,5 +65,13 @@ export class MessagesService {
       throw new NotFoundException('Could not find a message with this id');
     }
     return message;
+  }
+
+  async deleteMessage(messageId: string, roomId: string) {
+    const result = await this.messageModel.findByIdAndDelete(messageId);
+    await this.removeNumOfMessages(roomId);
+    if (!result) {
+      throw new NotFoundException('Could not find message with this id');
+    }
   }
 }

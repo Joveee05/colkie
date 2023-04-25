@@ -19,4 +19,5 @@ export interface Room {
   id: string;
   roomName: string;
   description: string;
+  numOfMessages: number;
 }
