@@ -12,12 +12,11 @@ import { RoomSchema } from 'src/rooms/rooms.model';
         name: 'Message',
         useFactory: () => {
           const schema = MessageSchema;
-          schema.pre(/^find/, function (next) {
+          schema.pre(/^find/, function () {
             this.populate({
-              path: 'roomID userID',
-              select: 'roomName fullName userName',
+              path: 'roomID',
+              select: 'roomName',
             });
-            next();
           });
           return schema;
         },
