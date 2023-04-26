@@ -11,6 +11,12 @@ export class UsersService {
     return this.userModel.findOne({ email }).exec();
   }
 
+  async updateUserRoom(userId: string, roomId: string) {
+    return this.userModel.findByIdAndUpdate(userId, {
+      $push: { rooms: roomId },
+    });
+  }
+
   async createUser(
     fullName: string,
     userName: string,

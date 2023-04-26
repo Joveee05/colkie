@@ -77,7 +77,7 @@ export class MessagesService {
 
   async getMessagesFromRoom(roomId: string) {
     const message = await this.messageModel.find({ roomID: roomId });
-    if (!message) {
+    if (message.length < 1) {
       throw new NotFoundException('Oops... This room has no messages yet');
     }
     return message;

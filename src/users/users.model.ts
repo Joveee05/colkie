@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
 import validator from 'validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export const UserSchema = new mongoose.Schema(
   {
@@ -26,12 +27,31 @@ export const UserSchema = new mongoose.Schema(
   },
 );
 
-export interface User {
+export class User {
+  @ApiProperty()
   id: string;
+
+  @ApiProperty()
   fullName: string;
+
+  @ApiProperty()
   userName: string;
+
+  @ApiProperty()
   email: string;
+
+  @ApiProperty()
   phoneNumber: string;
+
+  @ApiProperty()
   bio: string;
+
+  @ApiProperty()
   password: string;
+
+  @ApiProperty()
+  createdAt: Date;
+
+  @ApiProperty()
+  updatedAt: Date;
 }

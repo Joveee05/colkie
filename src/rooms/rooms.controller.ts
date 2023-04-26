@@ -7,14 +7,32 @@ import {
   Patch,
   Delete,
   Query,
+  Put,
 } from '@nestjs/common';
 import { RoomsService } from './rooms.service';
+import {
+  ApiTags,
+  ApiBody,
+  ApiCreatedResponse,
+  ApiConflictResponse,
+  ApiOkResponse,
+  ApiNotFoundResponse,
+} from '@nestjs/swagger';
+import { Room } from './rooms.model';
 
 @Controller('rooms')
 export class RoomsController {
   constructor(private roomService: RoomsService) {}
 
+  @ApiTags('Rooms')
   @Post('create_room')
+  @ApiCreatedResponse({
+    description: 'Room created successfully',
+    type: Room,
+  })
+  @ApiConflictResponse({
+    description: 'A room already exists with this name',
+  })
   createRoom(
     @Body('roomName') roomName: string,
     @Body('description') description: string,
@@ -22,7 +40,10 @@ export class RoomsController {
     return this.roomService.createRoom(roomName, description);
   }
 
+  @ApiTags('Rooms')
   @Get()
+  @ApiOkResponse({ description: '2 room(s) found', type: Room })
+  @ApiNotFoundResponse({ description: 'No rooms found in database' })
   async getAllRooms() {
     const rooms = await this.roomService.getAllRooms();
     return {
@@ -32,7 +53,10 @@ export class RoomsController {
     };
   }
 
+  @ApiTags('Rooms')
   @Get(':id')
+  @ApiOkResponse({ description: 'Room found', type: Room })
+  @ApiNotFoundResponse({ description: 'Could not find a room with this id' })
   async getRoom(@Param('id') roomId: string) {
     const room = await this.roomService.findRoom(roomId);
     return {
@@ -42,7 +66,11 @@ export class RoomsController {
     };
   }
 
+  @ApiTags('Rooms')
   @Patch(':id')
+  @ApiBody({ type: [Room] })
+  @ApiOkResponse({ description: 'Room updated', type: Room })
+  @ApiNotFoundResponse({ description: 'Could not find a room with this id' })
   async updateRoom(
     @Param('id') roomId: string,
     @Body('roomName') roomName: string,
@@ -60,7 +88,10 @@ export class RoomsController {
     };
   }
 
+  @ApiTags('Rooms')
   @Delete(':id')
+  @ApiOkResponse({ description: 'Room deleted successfully' })
+  @ApiNotFoundResponse({ description: 'Could not find a room with this id' })
   async deleteRoom(@Param('id') roomId: string) {
     await this.roomService.deleteRoom(roomId);
     return {
@@ -69,7 +100,10 @@ export class RoomsController {
     };
   }
 
-  @Patch(':id/add_user')
+  @ApiTags('Rooms')
+  @Put(':id/add_user')
+  @ApiOkResponse({ description: 'User added to room successfully' })
+  @ApiNotFoundResponse({ description: 'Could not find a room with this id' })
   async addUser(@Param('id') roomId: string, @Query('userId') userId: string) {
     await this.roomService.addUserToRoom(roomId, userId);
     return {

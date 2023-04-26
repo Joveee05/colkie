@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+import { ApiProperty } from '@nestjs/swagger';
 
 export const MessageSchema = new mongoose.Schema(
   {
@@ -20,9 +21,22 @@ export const MessageSchema = new mongoose.Schema(
   },
 );
 
-export interface Message {
+export class Message {
+  @ApiProperty()
   id: string;
+
+  @ApiProperty()
   body: string;
+
+  @ApiProperty()
   userID: string;
+
+  @ApiProperty()
   roomID: string;
+
+  @ApiProperty()
+  createdAt: Date;
+
+  @ApiProperty()
+  updatedAt: Date;
 }
