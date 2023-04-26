@@ -47,7 +47,15 @@ export class RoomsService {
   }
 
   async getAllRooms() {
-    const rooms = await this.roomModel.find().sort('-createdAt');
+    const rooms = await this.roomModel
+      .find()
+      .sort('-createdAt')
+      .populate({
+        path: 'participants',
+        select: 'fullName userName',
+      })
+      .populate({ path: 'messages', select: 'body' });
+
     if (rooms.length < 1) {
       throw new NotFoundException('No rooms found in database');
     }
@@ -55,7 +63,13 @@ export class RoomsService {
   }
 
   async findRoom(roomId: string) {
-    const room = await this.roomModel.findById(roomId);
+    const room = await this.roomModel
+      .findById(roomId)
+      .populate({
+        path: 'participants',
+        select: 'fullName userName',
+      })
+      .populate({ path: 'messages', select: 'body' });
     if (!room) {
       throw new NotFoundException('Could not find a room with this id');
     }
@@ -88,7 +102,6 @@ export class RoomsService {
       $push: { participants: userId },
     });
     await this.updateUserRoom(userId, roomId);
-    const result = await room.save({ validateBeforeSave: false });
-    return result;
+    return room;
   }
 }
