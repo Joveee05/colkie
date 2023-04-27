@@ -217,6 +217,14 @@ GET /api/messages/room/get_messages
 
 ```
 
+## Swagger Documentation
+
+```bash
+
+http://localhost:5000/api-docs
+
+```
+
 ## Examples
 
 ```
