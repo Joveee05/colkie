@@ -27,7 +27,7 @@ export class MessagesController {
     type: Message,
   })
   createMessage(
-    @Param('id') userId: string,
+    @Param('userId') userId: string,
     @Body('body') body: string,
     @Param('roomId') roomId: string,
   ) {
@@ -65,7 +65,7 @@ export class MessagesController {
   @ApiOkResponse({ description: 'Message deleted successfully' })
   @ApiNotFoundResponse({ description: 'Could not find a message with this id' })
   async deleteMessages(
-    @Param('id') messageId: string,
+    @Param('messageId') messageId: string,
     @Param('roomId') roomId: string,
   ) {
     await this.messageService.deleteMessage(messageId, roomId);
