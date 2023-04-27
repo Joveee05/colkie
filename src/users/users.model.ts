@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
 import validator from 'validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export const UserSchema = new mongoose.Schema(
   {
@@ -11,19 +12,46 @@ export const UserSchema = new mongoose.Schema(
     },
     phoneNumber: { type: String, required: [true, 'Please enter phoneNumber'] },
     photo: { type: String, default: 'default.jpg' },
+    rooms: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Room' }],
     bio: { type: String, maxLength: 250 },
+    password: { type: String, minLength: 8 },
   },
   {
+    toJSON: {
+      transform(doc, ret) {
+        delete ret.password;
+      },
+    },
     versionKey: false,
     timestamps: true,
   },
 );
 
-export interface User {
+export class User {
+  @ApiProperty()
   id: string;
+
+  @ApiProperty()
   fullName: string;
+
+  @ApiProperty()
   userName: string;
+
+  @ApiProperty()
   email: string;
+
+  @ApiProperty()
   phoneNumber: string;
+
+  @ApiProperty()
   bio: string;
+
+  @ApiProperty()
+  password: string;
+
+  @ApiProperty()
+  createdAt: Date;
+
+  @ApiProperty()
+  updatedAt: Date;
 }
