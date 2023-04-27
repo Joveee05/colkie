@@ -104,7 +104,10 @@ export class RoomsController {
   @Put(':id/add_user')
   @ApiOkResponse({ description: 'User added to room successfully' })
   @ApiNotFoundResponse({ description: 'Could not find a room with this id' })
-  async addUser(@Param('id') roomId: string, @Query('userId') userId: string) {
+  async addUser(
+    @Param('roomId') roomId: string,
+    @Query('userId') userId: string,
+  ) {
     await this.roomService.addUserToRoom(roomId, userId);
     return {
       status: 'success',
